@@ -6,6 +6,9 @@ Status  : _Initial Development_
 ## Build Instructions
 
 * Coming Soon ...
+* Submodules
+    * Run _git submodule init_ to initialize local configuration file.
+    * Run _git submodule update_ to fetch all submodules.
 
 ## External Libraries Used
 
