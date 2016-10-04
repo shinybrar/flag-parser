@@ -1,7 +1,5 @@
-======
-F-Engine Flag Parser
-======
-### This is a UDP Packet based F-Engine Flag Parser for CHIME FRB Telescope.
+# F-Engine Flag Parser
+### _This is a UDP Packet based F-Engine Flag Parser for CHIME FRB Telescope._
 #### Version : 0.0
 #### Status  : Initial Development
 
