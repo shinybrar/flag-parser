@@ -1,7 +1,7 @@
 # F-Engine Flag Parser
-### _This is a UDP Packet based F-Engine Flag Parser for CHIME FRB Telescope._
-#### Version : 0.0
-#### Status  : Initial Development
+__This is a UDP Packet based F-Engine Flag Parser for CHIME FRB Telescope.__
+__Version__ : _0.0_
+__Status__  : _Initial Development_
 
 ## Build Instructions
 
@@ -14,7 +14,7 @@
 * libtins
 * DPDK 2.0
 
-### Project Directory Setup ###
+## Project Directory Setup
 
 * _bin_     : Output executables go here, both for the app and for any tests and spikes.
 * _build_   : Contains all object files, and is removed on a clean.
@@ -25,6 +25,6 @@
 * _src_     : The application and only the application’s source files.
 * _test_    : All test code files. You do write tests, no?
 
-### Contact ###
+## Contact
 
 * Shiny Brar --> charanjotbrar@gmail.com
