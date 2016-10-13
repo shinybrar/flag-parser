@@ -1,4 +1,15 @@
-/**
+/*
+ * Author		: Shiny Brar
+ * Date Created : October 7, 2016
+ * Last Modified: Octopber 13, 2016
+ * Purpose		: FPGA Engine Flag Parser
+ * Dependencies : pcap
+ * Release		: Not Active
+ * Version		: 0.1
+ * Copyright	: GPL
+ */
+
+/*
 Top Level Module for FPGA Engine UDP Parser.
 
 Implementations:
@@ -51,7 +62,6 @@ int i,j;
 /*Main Function*/
 int main()	
 {
-
 /*	printf("Parser Version %d.%d\n",
             parser_VERSION_MAJOR,
             parser_VERSION_MINOR);    */
@@ -241,9 +251,13 @@ void printData (const u_char * data , int Size)
             for(j=i-16 ; j<i ; j++)
             {
                 if(data[j]>=32 && data[j]<=128)
+                {
                     printf("%c",(unsigned char)data[j]); //if its a number or alphabet
-                 
-                else printf("."); //otherwise print a dot
+                }
+                else 
+                {
+                	printf("."); //otherwise print a dot
+                }
             }
             printf("\n");
         } 
