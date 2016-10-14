@@ -1,3 +1,4 @@
+/*
 #include <netinet/in.h>
 #include <errno.h>
 #include <netdb.h>
@@ -18,12 +19,12 @@
 #include<sys/types.h>
 #include<unistd.h>
 
-/*void ProcessPacket(unsigned char* , int);
+void ProcessPacket(unsigned char* , int);
 void print_ip_header(unsigned char* , int);
 void print_tcp_packet(unsigned char * , int );
 void print_udp_packet(unsigned char * , int );
 void print_icmp_packet(unsigned char* , int );
-void PrintData (unsigned char* , int);*/
+void PrintData (unsigned char* , int);
 
 FILE *logfile;
 struct sockaddr_in source,dest;
@@ -69,3 +70,4 @@ int main()
     printf("Finished");
     return 0;
 }
+*/
