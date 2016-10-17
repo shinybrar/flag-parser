@@ -111,8 +111,7 @@ void processPacketPcap(
 		const struct pcap_pkthdr *header,
 		const u_char *buffer)
 {
-
-	parser::processPacket processPacket();
+	using namespace parser;
 
     int size = header->len;
 
