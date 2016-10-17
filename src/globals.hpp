@@ -3,12 +3,12 @@
 /*
  * Packet Statistics
  */
-long double _tcpPackets;
-long double _udpPackets;
-long double _igmpPackets;
-long double _icmpPackets;
-long double _otherPackets;
-long double _totalPackets;
+double _tcpPackets;
+double _udpPackets;
+double _igmpPackets;
+double _icmpPackets;
+double _otherPackets;
+double _totalPackets;
 
 /*
  * FPGA Flag Statistics

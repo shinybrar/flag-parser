@@ -20,24 +20,16 @@
 #include <netinet/udp.h>   	/*Provides declarations for udp header*/
 #include <netinet/ip.h>    	/*Provides declarations for ip header*/
 ////////////////////////////////////////////////////////////////////////////////
-namespace parser
-{
+namespace parser{
 
 class processPacket{
 //Public Access Modifiers
 public:
-
 	//Default Constructor
 	processPacket();
 
 	//Destructor
 	virtual ~processPacket();
-
-	//PCAP Packet Processor
-	void processPacketPcap(u_char *, const struct pcap_pkthdr *, const u_char *);
-
-	//Raw Socket Packet Processor
-	void processPacketRawSocket(unsigned char* buffer, int size);
 
 	//Print Raw Data
 	void printData (const u_char * , int);
@@ -50,13 +42,11 @@ public:
 
 	//printUdpPacket
 	void printUdpPacket(const u_char * , int);
-
 //Private Access Modifiers
 private:
 	/*Nothing Here So Far*/
-
-};
-} /* Ending processPacket*/
+};/* Ending processPacket*/
+}
 ////////////////////////////////////////////////////////////////////////////////
 #endif /* PROCESS_PACKET_HPP */
 ////////////////////////////////////////////////////////////////////////////////

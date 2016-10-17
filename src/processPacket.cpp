@@ -1,54 +1,17 @@
+#include "processPacket.hpp"
+////////////////////////////////////////////////////////////////////////////////
 using namespace parser;
 ////////////////////////////////////////////////////////////////////////////////
 /*Class Access*/
 processPacket::processPacket(){
-
+/*	bool createLogFile = false;
+	bool savePayload = false;
+	double payloadPointer = NULL;
+	double payloadSize = NULL;
+	double payloadPackets = NULL;*/
 }
 
 processPacket::~processPacket(){
-
-}
-////////////////////////////////////////////////////////////////////////////////
-void processPacket::processPacketPcap(
-		u_char *args,
-		const struct pcap_pkthdr *header,
-		const u_char *buffer)
-{
-    int size = header->len;
-
-    //Get the IP Header part of this packet , excluding the ethernet header
-    struct iphdr *iph = (struct iphdr*)(buffer + sizeof(struct ethhdr));
-    ++_totalPackets;
-    switch (iph->protocol) //Check the Protocol and do accordingly...
-    {
-        case 1:  /*ICMP Protocol*/
-            ++_icmpPackets;
-            break;
-
-        case 2:  //IGMP Protocol
-        	++_igmpPackets;
-            break;
-
-        case 6:  //TCP Protocol
-            ++_tcpPackets;
-            break;
-
-        case 17: //UDP Protocol
-            ++ _udpPackets;
-            printUdpPacket(buffer , size);
-            break;
-
-        default: //Oher Protocol like ARP etc.
-            ++_otherPackets;
-            break;
-    }
-    printf("TCP : %d   UDP : %d   ICMP : %d   IGMP : %d   Others : %d   Total : %d\r",
-    		_tcpPackets,
-			_udpPackets,
-			_icmpPackets,
-			_igmpPackets,
-			_otherPackets,
-			_totalPackets);
 }
 ////////////////////////////////////////////////////////////////////////////////
 void processPacket::printUdpPacket(

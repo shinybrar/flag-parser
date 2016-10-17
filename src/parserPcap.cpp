@@ -23,7 +23,9 @@
 #include "globals.hpp"
 #include "processPacket.hpp"
 /*#include <parserConfig.h>*/
- 
+////////////////////////////////////////////////////////////////////////////////
+//PCAP Packet Processor
+void processPacketPcap(u_char *, const struct pcap_pkthdr *, const u_char *);
 ////////////////////////////////////////////////////////////////////////////////
 /*PCAP Parser
  * Steps involved in the Sniffer
@@ -99,7 +101,53 @@ int main()
 
 	//Start the sniffing loop for n packets, -1 = infinite packets
 
-    pcap_loop(handle , -1 , parser::processPacket() , NULL);
+    pcap_loop(handle , -1 , processPacketPcap, NULL);
 
     return 0;
 }
+////////////////////////////////////////////////////////////////////////////////
+void processPacketPcap(
+		u_char *args,
+		const struct pcap_pkthdr *header,
+		const u_char *buffer)
+{
+
+	parser::processPacket processPacket();
+
+    int size = header->len;
+
+    //Get the IP Header part of this packet , excluding the ethernet header
+    struct iphdr *iph = (struct iphdr*)(buffer + sizeof(struct ethhdr));
+    ++_totalPackets;
+    switch (iph->protocol) //Check the Protocol and do accordingly...
+    {
+        case 1:  /*ICMP Protocol*/
+            ++_icmpPackets;
+            break;
+
+        case 2:  //IGMP Protocol
+        	++_igmpPackets;
+            break;
+
+        case 6:  //TCP Protocol
+            ++_tcpPackets;
+            break;
+
+        case 17: //UDP Protocol
+            ++ _udpPackets;
+            parser::processPacket().printUdpPacket(buffer, size);
+            break;
+
+        default: //Oher Protocol like ARP etc.
+            ++_otherPackets;
+            break;
+    }
+    printf("TCP : %f   UDP : %f   ICMP : %f   IGMP : %f   Others : %f   Total : %f\r",
+    		_tcpPackets,
+			_udpPackets,
+			_icmpPackets,
+			_igmpPackets,
+			_otherPackets,
+			_totalPackets);
+}
+////////////////////////////////////////////////////////////////////////////////
