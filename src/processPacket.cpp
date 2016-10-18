@@ -1,4 +1,14 @@
 #include "processPacket.hpp"
+#include <stdio.h> 				/*Standard needed tools*/
+#include <stdlib.h>    			/*malloc*/
+#include <string.h>    			/*memset*/
+#include <netinet/ip_icmp.h>   	/*ICMP Header Definition*/
+#include <netinet/udp.h>   		/*UDP Header*/
+#include <netinet/tcp.h>   		/*TCP Header*/
+#include <netinet/ip.h>    		/*IP Layer Header*/
+#include <sys/socket.h>			/*Raw Socket*/
+#include <arpa/inet.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 using namespace parser;
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,11 +82,11 @@ void processPacket::printIpHeader(
     struct iphdr *iph = (struct iphdr *)(Buffer  + sizeof(struct ethhdr) );
     iphdrlen =iph->ihl*4;
 
-    memset(&source, 0, sizeof(source));
-    source.sin_addr.s_addr = iph->saddr;
+    memset(&_source, 0, sizeof(_source));
+    _source.sin_addr.s_addr = iph->saddr;
 
-    memset(&dest, 0, sizeof(dest));
-    dest.sin_addr.s_addr = iph->daddr;
+    memset(&_destination, 0, sizeof(_destination));
+    _destination.sin_addr.s_addr = iph->daddr;
 
     printf("\n");
     printf("IP Header\n");
@@ -88,8 +98,8 @@ void processPacket::printIpHeader(
     printf("   |-TTL      		: %d\n",(unsigned int)iph->ttl);
     printf("   |-Protocol 		: %d\n",(unsigned int)iph->protocol);
     printf("   |-Checksum 		: %d\n",ntohs(iph->check));
-    printf("   |-Source IP        	: %s\n" , inet_ntoa(source.sin_addr) );
-    printf("   |-Destination IP   	: %s\n" , inet_ntoa(dest.sin_addr) );
+    printf("   |-Source IP        	: %s\n" , inet_ntoa(_source.sin_addr) );
+    printf("   |-Destination IP   	: %s\n" , inet_ntoa(_destination.sin_addr) );
 }
 ////////////////////////////////////////////////////////////////////////////////
 void processPacket::printData(
