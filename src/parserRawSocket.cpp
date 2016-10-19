@@ -6,7 +6,7 @@ using namespace std;
 
 /*
  * Packet Statistics
- */
+*/
 double _tcpPackets;
 double _udpPackets;
 double _igmpPackets;
