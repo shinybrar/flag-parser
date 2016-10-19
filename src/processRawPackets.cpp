@@ -43,7 +43,7 @@ void ProcessPacket(unsigned char* buffer, int size)
             ++_otherPackets;
             break;
     }
-    printf("TCP : %d   UDP : %d   ICMP : %d   IGMP : %d   Others : %d   Total : %d\r",
+    printf("TCP : %f   UDP : %f   ICMP : %f   IGMP : %f   Others : %f   Total : %f\r",
     		_tcpPackets,
 			_udpPackets,
 			_icmpPackets,_igmpPackets,

@@ -1,4 +1,5 @@
-#include "processPacket.hpp"
+#include "processPcapPacket.hpp"
+
 #include <stdio.h> 				/*Standard needed tools*/
 #include <stdlib.h>    			/*malloc*/
 #include <string.h>    			/*memset*/
@@ -10,7 +11,9 @@
 #include <arpa/inet.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-using namespace parser;
+using namespace std;
+struct sockaddr_in _source;
+struct sockaddr_in _destination;
 ////////////////////////////////////////////////////////////////////////////////
 /*Class Access*/
 processPacket::processPacket(){

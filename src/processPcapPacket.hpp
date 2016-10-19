@@ -20,7 +20,6 @@
 #include <netinet/udp.h>   	/*Provides declarations for udp header*/
 #include <netinet/ip.h>    	/*Provides declarations for ip header*/
 ////////////////////////////////////////////////////////////////////////////////
-namespace parser{
 
 class processPacket{
 //Public Access Modifiers
@@ -45,8 +44,9 @@ public:
 //Private Access Modifiers
 private:
 	/*Nothing Here So Far*/
+
 };/* Ending processPacket*/
-}
+
 ////////////////////////////////////////////////////////////////////////////////
 #endif /* PROCESS_PACKET_HPP */
 ////////////////////////////////////////////////////////////////////////////////

@@ -21,10 +21,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include "globals.hpp"
-#include "processPacket.hpp"
+#include "processPcapPacket.hpp"
 /*#include <parserConfig.h>*/
 
-using namespace parser;
+/*
+ * Initializing Global Packet Statistics
+ */
+double _tcpPackets;
+double _udpPackets;
+double _igmpPackets;
+double _icmpPackets;
+double _otherPackets;
+double _totalPackets;
+double _adcFlags;
+double _scalerFlags;
+double _fftFlags;
+double _totalFlags;
+
+
+using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 //PCAP Packet Processor
 void processPacketPcap(u_char *, const struct pcap_pkthdr *, const u_char *);
