@@ -12,10 +12,11 @@ Status  : _Initial Development_
 
 ## External Libraries Used
 
-* cmake
-* gtest 
-* libtins
-* DPDK 2.0
+* cmake -- Coming Soon
+* gtest -- Coming Soon
+* DPDK 2.0 -- Coming Soon
+* Boost C++ Libraries 1.58
+    * To install Boost Libraries run "sudo apt-get install libboost-all-dev" on Ubuntu
 
 ## Project Directory Setup
 
@@ -24,7 +25,7 @@ Status  : _Initial Development_
 * _doc_     : Documentation, notes, configuration files etc.
 * _include_ : All project header files, necessary third-party header files.
 * _lib_     : Any library compiled, or third party libs needed in development.
-* _spike_   : Smaller classes or files to test technologies or ideas. 
+* _scratch_ : Smaller classes or files to test technologies or ideas. 
 * _src_     : The application and only the application’s source files.
 * _test_    : All test code files. You do write tests, no?
 
