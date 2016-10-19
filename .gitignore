@@ -4,3 +4,8 @@ build
 
 #Ignore any executables
 bin/
+
+#Eclipse Project Files
+.cproject
+.project
+.settings/*
