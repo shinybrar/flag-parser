@@ -1,22 +1,29 @@
 # F-Engine Flag Parser
-UDP Packet based F-Engine Flag Parser for CHIME FRB Telescope
-Version : _0.0_  
-Status  : _Initial Development_  
+**UDP Packet based F-Engine Flag Parser for CHIME FRB Telescope**
+
+**Version** : _0.0_  
+**Status**  : _Initial Development_  
 
 ## Build Instructions
+```
+mkdir build
+cmake ../
+make
+```
 
-* Coming Soon ...
-* Submodules
-    * Run _git submodule init_ to initialize local configuration file.
-    * Run _git submodule update_ to fetch all submodules.
+## Initializing Git Submodules
+
+* Run ```git submodule init``` to initialize local configuration file.
+* Run ```git submodule update``` to fetch all submodules.
 
 ## External Libraries Used
 
-* cmake -- Coming Soon
-* gtest -- Coming Soon
-* DPDK 2.0 -- Coming Soon
-* Boost C++ Libraries 1.58
-    * To install Boost Libraries run "sudo apt-get install libboost-all-dev" on Ubuntu
+* [cmake](https://cmake.org/) -- Version >= 2.6
+* gtest -- Coming Soon, not implemented yet
+* DPDK 2.0 -- Coming Soon, not implemented yet
+* [Boost C++ Libraries](http://www.boost.org/)
+    * Developed on Boost 1.58.0
+    * To install libraries run ```sudo apt-get install libboost-all-dev``` on Ubuntu
 
 ## Project Directory Setup
 
