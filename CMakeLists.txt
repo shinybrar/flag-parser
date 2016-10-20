@@ -1,7 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
+
 project (parser)
+add_compile_options(-std=c++11)
+add_compile_options(-Wall -O2)
+
 #Get Cmake Modules
-set ( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/lib/cmake/modules/" )
+set ( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/include/cmake/modules/" )
 
 # The version number.
 set (parser_VERSION_MAJOR 0)
