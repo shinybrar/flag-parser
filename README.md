@@ -36,7 +36,7 @@ make
     * Coming Soon, not implemented yet
 * ### [Boost C++ Libraries](http://www.boost.org/) ###
     * Developed on Boost 1.58.0
-    * To install libraries run ```sudo apt-get install libboost-all-dev``` on Ubuntu
+    * **Ubuntu** - ```sudo apt-get install libboost-all-dev```
 
 ## Project Directory Setup
 
