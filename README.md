@@ -30,8 +30,10 @@ make
     * Ubuntu - ```sudo apt-get install cmake```
     * CentOS7 - ```sudo yum install cmake3```
 
-* gtest -- Coming Soon, not implemented yet
-* DPDK 2.0 -- Coming Soon, not implemented yet
+* gtest
+    * Coming Soon, not implemented yet
+* DPDK 2.0
+    * Coming Soon, not implemented yet
 * [Boost C++ Libraries](http://www.boost.org/)
     * Developed on Boost 1.58.0
     * To install libraries run ```sudo apt-get install libboost-all-dev``` on Ubuntu
