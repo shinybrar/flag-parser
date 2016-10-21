@@ -27,10 +27,9 @@ make
 ## External Libraries Used
 
 * **[cmake](https://cmake.org/)**
-```
-Ubuntu - sudo apt-get install cmake
-CentOS7 - sudo yum install cmake3
-```
+    * Ubuntu - ```sudo apt-get install cmake```
+    * CentOS7 - ```sudo yum install cmake3```
+
 * gtest -- Coming Soon, not implemented yet
 * DPDK 2.0 -- Coming Soon, not implemented yet
 * [Boost C++ Libraries](http://www.boost.org/)
