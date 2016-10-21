@@ -5,13 +5,15 @@
 **Status**  : _Initial Development_  
 
 ## Build Instructions
-```
+
 **Ubuntu**
+```
 mkdir build
 cmake ../
 make
-
+```
 **CentOS 7**
+```
 mkdir build
 cmake3 ../
 make
