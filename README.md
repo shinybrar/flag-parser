@@ -25,7 +25,8 @@ make
 * Run ```git submodule update``` to fetch all submodules.
 
 ## External Libraries Used
-
+* ### g++ ###
+* ### libpcap ###
 * ### [cmake](https://cmake.org/) ###
     * Ubuntu - ```sudo apt-get install cmake```
     * CentOS7 - ```sudo yum install cmake3```
