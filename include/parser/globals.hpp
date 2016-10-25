@@ -16,6 +16,15 @@ using namespace std;
 #include <arpa/inet.h>
 #include <unistd.h>
 
+/*Parsing Setup Variables		//Purpose of the variable		//Runtime flag*/
+extern int _PACKET_COUNT;		/*Number of Packets to Parse 	--cnt,c*/
+extern int _DST_MAC;			/*Destination Mac Address		--dmac,m*/
+extern int _SRC_MAC;			/*Source Mac Address			--smac,n*/
+extern int _DST_IP;				/*Destination IP Address		--dip,i*/
+extern int _SRC_IP;				/*Source IP Address				--sip,j*/
+extern int _PORT;				/*Port to parse data on			--prt,p*/
+extern bool _CREATE_LOG;		/*Create a log file or not		--log,l*/
+extern char _DEV[];				/*Devname of the NIC			--dev,d*/
 /*
  * Packet Statistics
  */

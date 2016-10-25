@@ -1,11 +1,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "globals.hpp"
 #include "processRawPackets.hpp"
+#include <arpa/inet.h>
+#include <iostream>
+#include <chrono>
 ////////////////////////////////////////////////////////////////////////////////
 using namespace std;
 
 /*
- * Packet Statistics
+ * Global Packet Statistics
  */
 double _tcpPackets;
 double _udpPackets;
@@ -19,14 +22,21 @@ double _fftFlags;
 double _totalFlags;
 
 /*
- * Globals
+ * Globals Initializations
  */
 int     _rawSocket;
 FILE    *_logfile;
 struct  sockaddr_in _source;
 struct  sockaddr_in _destination;
-bool    _createLog;
 
+
+int _PACKET_COUNT 	= 10;
+int _DST_IP;
+int _SRC_IP;
+int _DST_PORT		= 1900;
+int _SRC_PORT;
+bool _CREATE_LOG 	= true;
+char _DEV[]			= "eth0";
 
 int main()
 {
@@ -34,12 +44,16 @@ int main()
 	long int dataSize;
     struct sockaddr socketAddr;
     struct in_addr 	in;
-    //Buffer Pointer
+
+    //Allocate Memory for Buffer
     unsigned char *buffer = (unsigned char *)malloc(65536); //Its Big!
 
-    _logfile=fopen("log.txt","w");
-    if(_logfile==NULL){
-        printf("Unable to create file.");
+    //Create a Socket Address to listen on
+    if (_CREATE_LOG){
+    	_logfile=fopen("log.txt","w");
+    	if(_logfile==NULL){
+    		printf("Unable to create file.");
+    	}
     }
     printf("Starting...\n");
 
@@ -51,27 +65,50 @@ int main()
     _rawSocket = socket(AF_INET, SOCK_RAW, IPPROTO_UDP);
     //TCP Sniffer
     //_rawSocket = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
+    //Bind Socket to dev id
+    setsockopt(_rawSocket, SOL_SOCKET , SO_BINDTODEVICE , _DEV , strlen(_DEV)+1);
     
-    //setsockopt(sock_raw , SOL_SOCKET , SO_BINDTODEVICE , "eth0" , strlen("eth0")+ 1 );
-    
-    //
     if(_rawSocket < 0)
     {
         printf("Socket Error.\n");
         return 1;
     }
-    while(1)
+
+    while(_PACKET_COUNT>0)
     {
         socketAddrSize = sizeof socketAddr;
         //Receive a packet
         dataSize = recvfrom(
                 _rawSocket,                 //sockfd 
-                buffer,                     //
+                buffer,                     //Buffer
                 65536,
                 0,
                 &socketAddr,
                 (socklen_t*)&socketAddrSize
                 );
+
+        /*Find the UDP Header
+         * ---IP Header
+         * ---|UDP Header
+         * ---|--|Source Port
+         * ---|--|Destination Port
+         * ---|--|UDP Length
+         * ---|--|UDP Checksum
+         * ---|Data Payload
+         */
+        unsigned short ipHeaderLength;
+        struct iphdr *ipHeader = (struct iphdr *)buffer;
+        ipHeaderLength = ipHeader->ihl*4;
+        struct udphdr *udpHeader = (struct udphdr*)(buffer + ipHeaderLength);
+        //ntohs(udpHeader->source);	//Source Port
+        //Compare destination port address.
+        if (_DST_PORT == ntohs(udpHeader->dest)){
+        	//High Speed Data Write to log file.
+
+        	ProcessPacket(buffer, dataSize);
+        	--_PACKET_COUNT;
+        }
+
 
         if(dataSize <0 )
         {
@@ -79,7 +116,8 @@ int main()
             return 1;
         }
         //Now process the packet
-        ProcessPacket(buffer , dataSize);
+        //ProcessPacket(buffer , dataSize);
+        //--_PACKET_COUNT;
     }
     close(_rawSocket);
     printf("Finished");

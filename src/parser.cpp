@@ -8,15 +8,13 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     try {
-        string  destinationMacAddr;
-        string  sourceMacAddr;
         string  destinationIpAddr;
         string  sourceIpAddr;
         string  dev;
-        bool    createLog
-        int     port;
+        bool    createLog;
+        int     sourcePort;
+        int 	destinationPort;
         int     packetCount;    
-
 
         options_description desc("Allowed Options");
         desc.add_options()
@@ -25,14 +23,13 @@ int main(int argc, char* argv[])
         // The second is parameter to option
         // The third is description
         ("help,h", "Print Usage Message")
-        ("dev,d", value(&dev),                  "Interface to bind on, e.g eth0")
-        ("dst-mac", value(&destinationMacAddr), "Destination Mac Address e.g 48-2C-6A-1E-59-3D")
-        ("src-mac", value(&sourceMacAddr),      "Source Mac Address")
-        ("dst-ip", value(&destinationIpAddr),   "Destination IP Address e.g 192.168.175.0")
-        ("src-ip", value(&sourceIpAddr),        "Source IP Address")
-        ("port,p", value(&port),                "Port to parse data on, e.g 5555")
-        ("cnt,c", value(&packetCount),          "Number of packets to parse") 
-        ("log,l", value(&createLog),            "Create a log file - valid options - true,false,0,1") 
+        ("dev,d", 	value(&dev),                "Interface to bind on, e.g eth0")
+        ("smac,n", 	value(&sourceIpAddr),      	"Source IP Address, e.g. 192.168.175.0")
+        ("dip,i", 	value(&destinationIpAddr),  "Destination IP Address e.g 192.168.175.0")
+        ("sip,j",	value(&sourcePort),       	"Source Port data is coming from")
+        ("prt,p", 	value(&destinationPort),    "Destination Port to parse data on, e.g 5555")
+        ("cnt,c", 	value(&packetCount),        "Number of packets to parse")
+        ("log,l", 	value(&createLog),         	"Create a log file - valid options - true,false,0,1")
         ;
     
         variables_map vm;
