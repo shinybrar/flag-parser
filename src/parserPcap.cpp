@@ -17,12 +17,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 /* Imports*/
 #include <stdio.h>	
-#include </usr/include/pcap/pcap.h>
+#include <pcap.h>
 #include <stdlib.h>
 #include <string.h>
 #include "globals.hpp"
 #include "processPcapPacket.hpp"
-/*#include <parserConfig.h>*/
+#include "parserConfig.hpp"
 
 /*
  * Initializing Global Packet Statistics
@@ -37,7 +37,6 @@ double _adcFlags;
 double _scalerFlags;
 double _fftFlags;
 double _totalFlags;
-
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
@@ -54,9 +53,9 @@ void processPacketPcap(u_char *, const struct pcap_pkthdr *, const u_char *);
  */
 int main()	
 {
-/*	printf("Parser Version %d.%d\n",
+	printf("\n F-Engine UDP Parser \n Version: %d.%d\n\n",
             parser_VERSION_MAJOR,
-            parser_VERSION_MINOR);    */
+            parser_VERSION_MINOR);
 
 	/*Variable Declarations*/
 	pcap_if_t 	*allDevsPresent;	/*PCAP Interface Type*/
@@ -96,7 +95,7 @@ int main()
     }
 
     /*Asking user which device to bind on*/
-    printf("Enter the number of the NIC you want parsed : ");
+    printf("Enter the number of the NIC you want parsed: ");
     scanf("%d" , &n);
     devname = devs[n];
      
