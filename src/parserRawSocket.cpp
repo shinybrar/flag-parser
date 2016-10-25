@@ -33,10 +33,11 @@ struct  sockaddr_in _destination;
 int _PACKET_COUNT 	= 10;
 int _DST_IP;
 int _SRC_IP;
-int _DST_PORT		= 1900;
+int _DST_PORT		= 17500;
 int _SRC_PORT;
 bool _CREATE_LOG 	= true;
-char _DEV[]			= "eth0";
+bool checkPort		= false;
+char _DEV[]		= "eno1";
 
 int main()
 {
@@ -102,12 +103,16 @@ int main()
         struct udphdr *udpHeader = (struct udphdr*)(buffer + ipHeaderLength);
         //ntohs(udpHeader->source);	//Source Port
         //Compare destination port address.
-        if (_DST_PORT == ntohs(udpHeader->dest)){
-        	//High Speed Data Write to log file.
-
-        	ProcessPacket(buffer, dataSize);
-        	--_PACKET_COUNT;
+        if (checkPort)
+        	if (_DST_PORT == ntohs(udpHeader->dest)){
+        	    //High Speed Data Write to log file.
+        	    ProcessPacket(buffer, dataSize);
+        	    --_PACKET_COUNT;
         }
+	else{
+	    ProcessPacket(buffer, dataSize);
+	    --_PACKET_COUNT;
+	}
 
 
         if(dataSize <0 )
