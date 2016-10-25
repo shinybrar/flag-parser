@@ -103,16 +103,17 @@ int main()
         struct udphdr *udpHeader = (struct udphdr*)(buffer + ipHeaderLength);
         //ntohs(udpHeader->source);	//Source Port
         //Compare destination port address.
-        if (checkPort)
+        if (checkPort){
         	if (_DST_PORT == ntohs(udpHeader->dest)){
         	    //High Speed Data Write to log file.
         	    ProcessPacket(buffer, dataSize);
         	    --_PACKET_COUNT;
+        	}
         }
-	else{
-	    ProcessPacket(buffer, dataSize);
-	    --_PACKET_COUNT;
-	}
+        else{
+        	ProcessPacket(buffer, dataSize);
+        	--_PACKET_COUNT;
+        }
 
 
         if(dataSize <0 )
