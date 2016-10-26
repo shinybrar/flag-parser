@@ -38,7 +38,7 @@ make
 * ### [Boost C++ Libraries](http://www.boost.org/) ###
     * Developed on Boost 1.58.0
     * **Ubuntu** - ```sudo apt-get install libboost-all-dev```
-    * **CentOS 7** - Get Boost > Version 1.58.0 from ```http://www.boost.org/users/history/``` and follow the directions on ```http://www.boost.org/doc/libs/1_46_1/more/getting_started/unix-variants.html``` for Easy build and install.
+    * **CentOS 7** - Get Boost > Version 1.58.0 from [here](http://www.boost.org/users/history/) and follow the directions for [Easy Build and Install](http://www.boost.org/doc/libs/1_46_1/more/getting_started/unix-variants.html)
 
 ## Project Directory Setup
 
