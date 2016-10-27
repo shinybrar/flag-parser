@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 
 project (parser)
+
 add_compile_options(-std=c++11)
 #add_compile_options(-Wall -O2)
 
@@ -52,3 +53,5 @@ add_executable 	( pcapParser 	src/parserPcap.cpp)
 
 target_link_libraries (rawParser 	RawPacketProcessor)
 target_link_libraries (pcapParser 	PcapPacketProcessor pcap)
+
+

@@ -2,6 +2,7 @@
 #include "globals.hpp"
 #include "processRawPackets.hpp"
 #include <arpa/inet.h>
+#include <net/if.h>
 #include <iostream>
 #include <chrono>
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +38,7 @@ int _DST_PORT		= 17500;
 int _SRC_PORT;
 bool _CREATE_LOG 	= true;
 bool checkPort		= false;
-char _DEV[]		= "eno1";
+char _DEV[]		    = "eno2";
 
 int main()
 {
@@ -67,7 +68,16 @@ int main()
     //TCP Sniffer
     //_rawSocket = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
     //Bind Socket to dev id
-    setsockopt(_rawSocket, SOL_SOCKET , SO_BINDTODEVICE , _DEV , strlen(_DEV)+1);
+    
+    struct ifreq ifr;
+    memset(&ifr, 0, sizeof(ifr));
+    snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), "xxx");
+    if (setsockopt(_rawSocket, SOL_SOCKET, SO_BINDTODEVICE, (void *)&ifr, sizeof(ifr)) < 0) {
+            printf("Could not set interface");
+    }
+    
+
+    //setsockopt(_rawSocket, SOL_SOCKET , SO_BINDTODEVICE , _DEV , strlen(_DEV)+1);
     
     if(_rawSocket < 0)
     {

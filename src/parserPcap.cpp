@@ -100,24 +100,38 @@ int main()
     devname = devs[n];
      
     /*Attempting to open device and create PCAP handle*/
-    printf("Opening NIC %s for parsing ... ", 
-    	devname);
-    
+    printf("Opening NIC %s ...\n", devname);
     handle = pcap_open_live(devname , 65536 , 1 , 0 , errbuf);
-     
     if (handle == NULL) 
     {
-        fprintf(stderr, "Failure, Couldn't open device %s : %s\n", 
+        fprintf(stderr, "FAILURE, Couldn't open device %s : %s\n", 
         	devname, 
         	errbuf);
         exit(1);
     }
-    printf("Success, parsing on device: %s\n", devname);
+    printf("SUCCESS, parsing on device: %s\n", devname);
 
+    /*
+     * Building the Filter to Parse Data
+     */
+    struct bpf_program filterProgram;       /* The compiled filter expression */
+    char filterExpression[] = "port 5353";  /* The filter expression */
+    bpf_u_int32 mask;                       /* The netmask of our sniffing device */
+    bpf_u_int32 net;                        /* The IP of our sniffing device */
+
+    if (pcap_compile(handle, &filterProgram, filterExpression, 1, net) == -1) {
+        printf("Couldn't parse filter%s: %s\n",filterExpression, pcap_geterr(handle));
+        return(2);
+    }
+
+    if (pcap_setfilter(handle, &filterProgram) == -1) {
+        printf("Couldn't install filter %s: %s\n",filterExpression, pcap_geterr(handle));
+        return(2);
+    }
 
 	//Start the sniffing loop for n packets, -1 = infinite packets
 
-    pcap_loop(handle , -1 , processPacketPcap, NULL);
+    pcap_loop(handle , 10, processPacketPcap, NULL);
 
     return 0;
 }
@@ -127,6 +141,7 @@ void processPacketPcap(
 		const struct pcap_pkthdr *header,
 		const u_char *buffer)
 {
+    printf("Processing Packed %f\n",_totalPackets);
 	int size = header->len;
 
     //Get the IP Header part of this packet , excluding the ethernet header
@@ -155,12 +170,14 @@ void processPacketPcap(
             ++_otherPackets;
             break;
     }
-    printf("TCP : %f   UDP : %f   ICMP : %f   IGMP : %f   Others : %f   Total : %f\r",
+   /* printf("TCP : %f   UDP : %f   ICMP : %f   IGMP : %f   Others : %f   Total : %f\r",
     		_tcpPackets,
 			_udpPackets,
 			_icmpPackets,
 			_igmpPackets,
 			_otherPackets,
 			_totalPackets);
+    */
+    printf("Finished Processing\n");
 }
 ////////////////////////////////////////////////////////////////////////////////
