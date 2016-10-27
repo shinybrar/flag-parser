@@ -22,21 +22,6 @@ configure_file (
 #Find Packages
 find_package(PCAP)
 
-#Setting up Boost
-set(Boost_USE_STATIC_LIBS 	ON)
-set(Boost_USE_MULTITHREAD	ON)
-set(Boost_USE_STATIC_RUNTIME	OFF)
-find_package(Boost 1.58.0 COMPONENTS log program_options )
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    add_executable ( boostLog scratch/boostLog.cpp )
-    add_executable ( boostOptions scratch/boostOptions.cpp)
-    add_executable ( parser src/parser.cpp ) 
-    target_link_libraries (boostLog ${Boost_LIBRARIES} )
-    target_link_libraries (boostOptions ${Boost_LIBRARIES} )
-    target_link_libraries (parser       ${Boost_LIBRARIES} )
-endif()
- 
 # add the binary tree to the search path for include files
 # so that we will find TutorialConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
@@ -46,7 +31,6 @@ include_directories("${PROJECT_SOURCE_DIR}/include/parser")
 # Add Libraries
 add_library 	( RawPacketProcessor 	src/processRawPackets.cpp ) 
 add_library 	( PcapPacketProcessor 	src/processPcapPacket.cpp )
-add_library 	( Logger		        scratch/boostLog.cpp )
 # add the executable
 add_executable 	( rawParser		src/parserRawSocket.cpp)
 add_executable 	( pcapParser 	src/parserPcap.cpp)
