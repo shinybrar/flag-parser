@@ -53,6 +53,16 @@ void processPacketPcap(u_char *, const struct pcap_pkthdr *, const u_char *);
  */
 int main()	
 {
+    //TODO:pyConfig.hpp not implemented
+    //
+
+    /*Setup Configuration imported from pyConfig.hpp
+     *  1. pyDev            <- NIC, e.g. "eth0"
+     *  2. pyFilter         <- Port, e.g. "port 41000"
+     *  3. pyPacketCount    <- Packets, e.g. 5
+     *  4. pyConfig         <- Use python generated config, e.g. true
+     */
+
 	printf("\n F-Engine UDP Parser \n Version: %d.%d\n\n",
             parser_VERSION_MAJOR,
             parser_VERSION_MINOR);
@@ -62,43 +72,69 @@ int main()
 	pcap_if_t 	*device;			
     pcap_t 		*handle;			/*PCAP device handler for the device to be parsed*/
  
-    char errbuf[PCAP_ERRBUF_SIZE];
-    char *devname; 
-    char devs[100][100];
-    int count = 1;
-    int n;
+    char    errbuf[PCAP_ERRBUF_SIZE];
+    char    *devname; 
+    char    devs[100][100];
+    int     count = 1;
+    int     devNumber;
+    int     portNumber;
+    bool    pyConfig = false;
 
-	/*Looking for all available devices. */
-	printf("Finding available Network Interface Devices ...");
-    if( pcap_findalldevs( &allDevsPresent , errbuf) )
-    {
-        printf("Error finding devices : %s", 
-        	errbuf);
-        exit(1);
-    }
-    printf("Done");
-     
-    /*Displaying available devices*/
-    printf("\nAvailable NIC(s) :\n");
-    for(device = allDevsPresent; device != NULL; device = device->next)
-    {
-        printf("%d. %s - %s\n", 
-        	count, 
-        	device->name,
-        	device->description);
+    /* 
+     * pyConfig not provided, ask user for setup details in terminal.
+     */
+    if (pyConfig == false){
 
-        if(device->name != NULL)
+        /*Looking for all available devices. */
+        printf("Finding available Network Interface Devices ...");
+        if( pcap_findalldevs( &allDevsPresent , errbuf) )
         {
-            strcpy(devs[count], device->name);
+            printf("Error finding devices : %s", 
+                errbuf);
+            exit(1);
         }
-        count++;
+        printf("Done");
+         
+        /*Displaying available devices*/
+        printf("\nAvailable NIC(s) :\n");
+        for(device = allDevsPresent; device != NULL; device = device->next)
+        {
+            printf("%d. %s - %s\n", 
+                count, 
+                device->name,
+                device->description);
+
+            if(device->name != NULL)
+            {
+                strcpy(devs[count], device->name);
+            }
+            count++;
+        }
+
+        /*Asking user which device to bind on*/
+        printf("\nEnter the number of the NIC you want to parse: ");
+        scanf("%d" , &devNumber);
+        devname = devs[devNumber];
+
+        /*Asking user which port to parse data on*/
+        printf("\nEnter the port you want to parse packets on: ");
+        scanf("%d", &portNumber);
+
+        /*Asking user how many packets to parse*/
+        printf("\nEnter the number of packets to parse: ");
+        scanf("%d", &count);
+        
+    }
+    /*
+     * pyConfig provided, overide variables.
+     */
+    if (pyConfig == true){
+        //Map Python Generated Configuration
+        //devname
+        //portNumber
+        //count
     }
 
-    /*Asking user which device to bind on*/
-    printf("Enter the number of the NIC you want parsed: ");
-    scanf("%d" , &n);
-    devname = devs[n];
-     
     /*Attempting to open device and create PCAP handle*/
     printf("Opening NIC %s ...\n", devname);
     handle = pcap_open_live(devname , 65536 , 1 , 0 , errbuf);
@@ -114,10 +150,11 @@ int main()
     /*
      * Building the Filter to Parse Data
      */
-    struct bpf_program filterProgram;       /* The compiled filter expression */
-    char filterExpression[] = "port 5353";  /* The filter expression */
-    bpf_u_int32 mask;                       /* The netmask of our sniffing device */
-    bpf_u_int32 net;                        /* The IP of our sniffing device */
+    struct bpf_program filterProgram;                           /* The compiled filter expression */
+    char portNum_char =  (char) portNumber;
+    char filterExpression[] = strcpy("port ",portNum_char);   /* The filter expression */
+    bpf_u_int32 mask;                                           /* The netmask of our sniffing device */
+    bpf_u_int32 net;                                            /* The IP of our sniffing device */
 
     if (pcap_compile(handle, &filterProgram, filterExpression, 1, net) == -1) {
         printf("Couldn't parse filter%s: %s\n",filterExpression, pcap_geterr(handle));

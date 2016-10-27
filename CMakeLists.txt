@@ -29,13 +29,13 @@ include_directories("${PCAP_INCLUDE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/include/parser")
  
 # Add Libraries
-add_library 	( RawPacketProcessor 	src/processRawPackets.cpp ) 
+#add_library 	( RawPacketProcessor 	src/processRawPackets.cpp ) 
 add_library 	( PcapPacketProcessor 	src/processPcapPacket.cpp )
 # add the executable
-add_executable 	( rawParser		src/parserRawSocket.cpp)
+#add_executable 	( rawParser		src/parserRawSocket.cpp)
 add_executable 	( pcapParser 	src/parserPcap.cpp)
 
-target_link_libraries (rawParser 	RawPacketProcessor)
+#target_link_libraries (rawParser 	RawPacketProcessor)
 target_link_libraries (pcapParser 	PcapPacketProcessor pcap)
 
 
