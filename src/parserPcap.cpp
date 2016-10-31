@@ -222,7 +222,6 @@ int main (int argc, char **argv)
     char    *devname; 
     char    devs[100][100];
     int     devNumber;
-    int     portNumber;
 
     if (terminalFlag)
     {
@@ -300,7 +299,7 @@ int main (int argc, char **argv)
         char* filterExpression = new char[filter.length() + 1];
         copy(filter.c_str(), filter.c_str() + filter.length() + 1, filterExpression); 
         struct bpf_program filterProgram;           /* The compiled filter expression */
-        bpf_u_int32 mask;                           /* The netmask of our sniffing device */
+        //bpf_u_int32 mask;                           /* The netmask of our sniffing device */
         bpf_u_int32 net;                            /* The IP of our sniffing device */
 
         /*Compile Filter*/
