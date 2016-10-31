@@ -152,7 +152,6 @@ int main (int argc, char **argv)
                 exit(0);
 
             case 'd':
-                printf ("option -d with value `%s'\n", optarg);
                 devid = optarg;
                 break;
 
