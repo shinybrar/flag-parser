@@ -32,7 +32,7 @@
 #include "processPcapPacket.hpp"
 #include "parserConfig.hpp"
 
-#define STATIC_BINARY_FILENAME "packet.bin"
+#define STATIC_BINARY_FILENAME "packetData.bin"
 
 ////////////////////////////////////////////////////////////////////////////////
 /*
@@ -64,15 +64,20 @@ void usage()
 {
     printf("\nF-Engine UDP Packet Parser\n");
     printf( "Valid Options:\
+            \nUSER FLAGS:\
             \n[--help,-h]   Prints this message\
             \n[--verbose]   Configures parser in verbose mode\
             \n[--binary]    Creates a binary data dump file\
             \n[--terminal]  Runs the user through configuration on the terminal\
+            \n[--stat]      Prints the packets statistics at the end of capture\
+            \nUSER OPTIONS:\
             \n[--dev,-d]    NIC to grab packets from, e.g. eth0\
             \n[--port,-p]   Port to grab packets from, e.g. 5555\
             \n              DEFAULT: -p 0 results in all packets\
             \n[--count,-c]  Number of packets to parse, e.g. 10\
-            \n              NOTE: -c 0 grabs infinite packets\n");
+            \n              NOTE: -c 0 grabs infinite packets\
+            \nEXAMPLE:\
+            \n./parserPcap --binary -d eno0 -p 41000 -c 5\n");
 }
 ////////////////////////////////////////////////////////////////////////////////
 /*
@@ -81,11 +86,18 @@ void usage()
 void processPacketPcap(u_char *, const struct pcap_pkthdr *, const u_char *);
 
 ////////////////////////////////////////////////////////////////////////////////
+/*
+ * PCAP Packet Dump
+ */
+void packetDump(u_char *dumpFile, const struct pcap_pkthdr *header, const u_char *buffer);
 
-/* Operation Flags */
+////////////////////////////////////////////////////////////////////////////////
+
+/* Runtime Operation Flags */
 static int binaryFlag;          /* Creates a binary data file dump */
 static int verboseFlag;         /* Prints Packet data to terminal */
-static int terminalFlag;        /* Runs the user through config through terminal */
+static int terminalFlag;        /* Runs the user through setup through terminal */
+static int statisticsFlag;      /* Prints the stats of all packets seen during a capture */
 
 int main (int argc, char **argv)
 {   
@@ -106,6 +118,7 @@ int main (int argc, char **argv)
             {"verbose", no_argument,    &verboseFlag, 1},
             {"binary",  no_argument,    &binaryFlag,  1},
             {"terminal",no_argument,    &terminalFlag,1},
+            {"stat",    no_argument,    &statisticsFlag,1},
             /* These options don’t set a flag.
             We distinguish them by their indices. */
             {"help",    no_argument,       0, 'h'},
@@ -160,7 +173,7 @@ int main (int argc, char **argv)
         }
     }
 
-    /* --verbose flag turns on printf*/
+    /* --Verbose Flag turns on printf*/
     if (verboseFlag){
         printf("\nParser Configuration Details:\n");
         if (verboseFlag)
@@ -203,7 +216,7 @@ int main (int argc, char **argv)
 	pcap_if_t 	    *allDevsPresent;	/*PCAP Interface Type for all devices*/
 	pcap_if_t 	    *device;			/*Device of interest to bind on*/
     pcap_t 		    *handle;			/*PCAP device handler for the device to be parsed*/
-    pcap_dumper_t   *pd;                /*PCAP pointer to the dump file */
+    pcap_dumper_t   *dumpFile;          /*PCAP pointer to the dump file */
  
     char    errbuf[PCAP_ERRBUF_SIZE];
     char    *devname; 
@@ -213,7 +226,6 @@ int main (int argc, char **argv)
 
     if (terminalFlag)
     {
-
         /*Looking for all available devices*/
         printf("Finding available Network Interface Devices ... ");
         if( pcap_findalldevs( &allDevsPresent , errbuf) )
@@ -240,7 +252,7 @@ int main (int argc, char **argv)
         }
 
         /*Asking user which device to bind on*/
-        printf("\nEnter NIC to bind : ");
+        printf("\nEnter NIC # to bind: ");
         scanf("%d" , &devNumber);
         devname = devs[devNumber];
 
@@ -253,27 +265,33 @@ int main (int argc, char **argv)
         scanf("%d", &count);
     }
     else{
-        /*Setup settins based on command-line parser*/
-        /*Port and Count already handled separetly*/
+        /*Setup settinsg based on command-line parser*/
+        /*Port and Count already handled separately*/
         devname = devid;
     }
 
 
+    /* 
+     * PCAP Parser
+     */
+
     /*Attempting to open device and create PCAP handle*/
     printf("Opening NIC: %s\n", devname);
-    handle = pcap_open_live(devname , 65536 , 1 , 0 , errbuf);
+    handle = pcap_open_live(devname,    //Name of Device 
+                            65536,      //Packet Buffer Size
+                            1,          //Promiscous Mode ON
+                            0,          //User
+                            errbuf);    //Error String Returned by PCAP
     if (handle == NULL) 
     {
-        printf("FAILURE: Could not open device %s : %s\n", 
-        	devname, 
-        	errbuf);
+        printf("FAILURE: Could not open device %s : %s\n", devname, errbuf);
         exit(1);
     }
     printf("SUCCESS: Capturing packets on device: %s\n", devname);
 
     if (port != 0){
         /*
-         * Building the Filter to Capture Data based on port
+         * Building the Filter to Capture Data based on port number
          * The port filter has to be in the form char[] = "port 22"
          */
         stringstream filterSS;                  
@@ -299,12 +317,12 @@ int main (int argc, char **argv)
     }
 
 	/*
-     * Start the sniffing loop for $count packets
+     * Start the sniffing loop for --count packets
      * NOTE: when count = -1, infinite packets are sniffed
      */
     if (binaryFlag)
     {
-        //Create a Binary Data Dump
+        //Create a Binary Data Dump File
         //Static Filename = packets.bin
         
 
@@ -312,7 +330,7 @@ int main (int argc, char **argv)
         strcpy(filename, STATIC_BINARY_FILENAME);
         int pcount;
         
-        if ((pd = pcap_dump_open(handle,filename)) == NULL) {
+        if ((dumpFile = pcap_dump_open(handle,filename)) == NULL) {
             /*
              * Print out error message if pcap_dump_open failed. This will
              * be the below message followed by the pcap library error text,
@@ -322,20 +340,14 @@ int main (int argc, char **argv)
             exit(1);
         }
 
-        if ((pcount = pcap_dispatch(handle, count, &pcap_dump, (char *)pd)) < 0) {
-                /*
-                 * Print out appropriate text, followed by the error message
-                 * generated by the packet capture library.
-                 */
-                printf("Error reading packets from interface %s", devname);
-                exit(1);
-        }
+        /* Start capture to Dump File */
+        pcap_loop(handle, count, packetDump, (unsigned char *)dumpFile);
+
         printf("Packets received and successfully passed through filter: %d.\n",pcount);
         /*
          * Close the savefile opened in pcap_dump_open().
          */
-        pcap_dump_close(pd);
-
+        pcap_dump_close(dumpFile);
     }
     else
     {
@@ -370,7 +382,10 @@ void processPacketPcap(
 
         case 17: //UDP Protocol
             ++ _udpPackets;
-            processPacket().printUdpPacket(buffer, size);
+            if (verboseFlag)
+            {
+                processPacket().printUdpPacket(buffer, size);
+            }
             break;
 
         default: //Other Protocol like ARP etc.
@@ -383,7 +398,15 @@ void processPacketPcap(
 			_icmpPackets,
 			_igmpPackets,
 			_otherPackets,
-			_totalPackets);
-   
+			_totalPackets); 
 }
+////////////////////////////////////////////////////////////////////////////////
+
+/* Callback function invoked by libpcap for every incoming packet */
+void packetDump(u_char *dumpFile, const struct pcap_pkthdr *header, const u_char *buffer)
+{
+    /* Save the packet on the dump file */
+    pcap_dump(dumpFile, header, buffer);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
