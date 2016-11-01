@@ -20,19 +20,19 @@ configure_file (
   )
 
 #Find Packages
-#find_package(PCAP)
+find_package(PCAP)
 
 # add the binary tree to the search path for include files
 # so that we will find TutorialConfig.h
 include_directories("${PROJECT_BINARY_DIR}")
-#include_directories("${PCAP_INCLUDE_DIR}") 
+include_directories("${PCAP_INCLUDE_DIR}") 
 include_directories("${PROJECT_SOURCE_DIR}/include/parser")
-include_directories("${PROJECT_SOURCE_DIR}/include/libpcap-1.8.1")
 
 # Add Libraries
 #add_library 	( RawPacketProcessor 	src/processRawPackets.cpp ) 
 add_library 	( PcapPacketProcessor 	src/processPcapPacket.cpp )
-# add the executable
+
+#Add the executable
 #add_executable 	( rawParser		src/parserRawSocket.cpp)
 add_executable 	( pcapParser 	src/parserPcap.cpp)
 
